@@ -114,7 +114,13 @@ INSERT INTO Tipo_Servicio (Nombre, Descripcion) VALUES
     ('Correctivo', 'Reparación de fallas existentes en el vehículo');
  
 INSERT INTO Administrador (Usuario, Password, Nombre, Email) VALUES
-    ('admin', '$2a$10$placeholder_hash_cambiar', 'Administrador Principal', 'admin@agencia.com');
+    ('admin', 'admin01', 'Administrador Principal', 'admin@agencia.com');
  
 INSERT INTO Marca (Nombre) VALUES
     ('Toyota'), ('Nissan'), ('Honda'), ('Volkswagen'), ('Chevrolet');
+
+INSERT INTO Cliente(`Id_Cliente`, `Nombre`, `Apellido`, `Telefono`, `Email`) VALUES ('1','Aldair','Lopez','8445379136','aldairlopez@uadec.edu.mx');
+INSERT INTO Cliente(`Id_Cliente`, `Nombre`, `Apellido`, `Telefono`, `Email`) VALUES ('2','Erik','Compian','8448080876','erikc123@gmail.com');
+INSERT INTO Vehiculo(`Id_Vehiculo`, `Id_Cliente`, `Id_Modelo`, `Num_Serie`, `Color`, `Placa`, `Km_Actual`) VALUES ('1','1','1','800142fg','Plata','FKD9156
+','92000');
+INSERT INTO Modelo(`Id_Modelo`, `Id_Marca`, `Nombre`, `Anio`) VALUES ('1','3','Civic','2010');
