@@ -1,0 +1,47 @@
+﻿@{
+    // Esto quita el menú de navegación por defecto de ASP.NET
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Agencia Automotriz</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="d-flex align-items-center justify-content-center" style="height: 100vh; background-color: #f4f6f9;">
+
+    <div class="card shadow-lg" style="width: 25rem; border-radius: 15px;">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold text-primary">Agencia de Autos</h3>
+                <p class="text-muted">Mantenimiento y Control</p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger text-center shadow-sm" role="alert">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-controller="Acceso" asp-action="Index" method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Usuario</label>
+                    <input type="text" name="usuario" class="form-control form-control-lg" required placeholder="Ej. admin" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Contraseña</label>
+                    <input type="password" name="password" class="form-control form-control-lg" required placeholder="********" />
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

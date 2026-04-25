@@ -1,0 +1,23 @@
+﻿@model AgenciaAutosMVC.Models.Vehiculo
+
+<div class="card border-danger shadow-sm mt-4" style="max-width: 600px; margin: 0 auto;">
+    <div class="card-header bg-danger text-white text-center">
+        <h4 class="mb-0">¿Estás seguro de eliminar este vehículo?</h4>
+    </div>
+    <div class="card-body text-center">
+        <h5 class="text-primary">@Model.IdModeloNavigation.IdMarcaNavigation.Nombre @Model.IdModeloNavigation.Nombre</h5>
+        <p class="mb-1"><strong>Placa:</strong> @Model.Placa</p>
+        <p class="mb-1"><strong>Color:</strong> @Model.Color</p>
+        <p class="mb-4"><strong>Dueño:</strong> @Model.IdClienteNavigation.Nombre @Model.IdClienteNavigation.Apellido</p>
+
+        <div class="alert alert-warning">
+            Esta acción no se puede deshacer.
+        </div>
+
+        <form asp-controller="Vehiculos" asp-action="Delete" method="post">
+            <input type="hidden" asp-for="IdVehiculo" />
+            <button type="submit" class="btn btn-danger btn-lg me-2">Sí, Eliminar</button>
+            <a href="/Vehiculos" class="btn btn-secondary btn-lg">Cancelar</a>
+        </form>
+    </div>
+</div>

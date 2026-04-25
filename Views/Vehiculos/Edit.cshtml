@@ -1,0 +1,53 @@
+﻿@model AgenciaAutosMVC.Models.Vehiculo
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-warning text-dark">
+        <h3 class="mb-0">Editar Vehículo</h3>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Vehiculos" asp-action="Edit" method="post">
+            <input type="hidden" asp-for="IdVehiculo" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Dueño (Cliente):</label>
+                    <select asp-for="IdCliente" asp-items="ViewBag.Clientes" class="form-select" required></select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Modelo del Vehículo:</label>
+                    <select asp-for="IdModelo" asp-items="ViewBag.Modelos" class="form-select" required></select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Número de Serie (VIN):</label>
+                    <input type="text" asp-for="NumSerie" class="form-control" required />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Placa:</label>
+                    <input type="text" asp-for="Placa" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Color:</label>
+                    <input type="text" asp-for="Color" class="form-control" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Kilometraje Actual:</label>
+                    <input type="number" asp-for="KmActual" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-warning fw-bold">Guardar Cambios</button>
+                <a href="/Vehiculos" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

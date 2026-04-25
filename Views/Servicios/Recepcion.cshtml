@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Recepción de Vehículo";
+}
+
+<div class="card shadow-lg mt-5" style="max-width: 600px; margin: 0 auto;">
+    <div class="card-header bg-primary text-white text-center">
+        <h3 class="mb-0">Recepción para Mantenimiento</h3>
+    </div>
+    <div class="card-body p-4">
+
+        <form asp-controller="Servicios" asp-action="Recepcion" method="post">
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Seleccione el Vehículo:</label>
+                <select name="idVehiculo" asp-items="ViewBag.Vehiculos" class="form-select form-select-lg" required>
+                    <option value="">-- Buscar vehículo por placa --</option>
+                </select>
+                <small class="text-muted">El vehículo debe estar previamente registrado en el sistema.</small>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Tipo de Mantenimiento:</label>
+                <select name="tipoMantenimiento" class="form-select form-select-lg" required>
+                    <option value="">-- Seleccione una opción --</option>
+                    <option value="Preventivo">Preventivo (Rutina, Aceite, Filtros)</option>
+                    <option value="Correctivo">Correctivo (Reparación por Falla)</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Persona que entrega el vehículo:</label>
+                <input type="text" name="quienEntrego" class="form-control form-control-lg" placeholder="Ej. Juan Pérez (Dueño) o Familiar" required />
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Generar Orden de Servicio</button>
+            </div>
+
+        </form>
+    </div>
+</div>
