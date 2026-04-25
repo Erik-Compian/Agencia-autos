@@ -1,0 +1,40 @@
+﻿@model AgenciaAutosMVC.Models.Servicio
+
+<div class="card shadow-sm mt-4" style="max-width: 700px; margin: 0 auto;">
+    <div class="card-header bg-warning text-dark">
+        <h4 class="mb-0">Actualizar Estatus de Servicio #@Model.Folio</h4>
+    </div>
+    <div class="card-body">
+
+        <div class="alert alert-secondary">
+            <strong>Vehículo:</strong> @Model.IdVehiculoNavigation.IdModeloNavigation.IdMarcaNavigation.Nombre @Model.IdVehiculoNavigation.IdModeloNavigation.Nombre <br />
+            <strong>Placas:</strong> @Model.IdVehiculoNavigation.Placa <br />
+            <strong>Fecha de Ingreso:</strong> @Model.FechaIngreso
+        </div>
+
+        <form asp-controller="Servicios" asp-action="Actualizar" method="post">
+            <input type="hidden" name="Folio" value="@Model.Folio" />
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Estatus del Servicio:</label>
+                <select name="Estatus" class="form-select form-select-lg" required>
+                    <option value="En espera" selected="@(Model.Estatus == "En espera" ? "selected" : null)">En espera</option>
+                    <option value="En proceso" selected="@(Model.Estatus == "En proceso" ? "selected" : null)">En proceso</option>
+                    <option value="Finalizado" selected="@(Model.Estatus == "Finalizado" ? "selected" : null)">Finalizado</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Descripción del Trabajo / Diagnóstico:</label>
+                <textarea name="Descripcion" class="form-control" rows="4" required>@Model.Descripcion</textarea>
+                <small class="text-muted">Detalla las refacciones utilizadas o el trabajo realizado por el mecánico.</small>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/Servicios" class="btn btn-secondary me-md-2">Cancelar</a>
+                <button type="submit" class="btn btn-warning fw-bold">Guardar Cambios</button>
+            </div>
+        </form>
+
+    </div>
+</div>
