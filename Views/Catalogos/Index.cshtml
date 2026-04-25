@@ -1,0 +1,95 @@
+﻿<div class="container mt-4">
+    <h2 class="mb-4"> Administración de Catálogos de Autos</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">Nueva Marca</div>
+                <div class="card-body">
+                    <form asp-action="NuevaMarca" method="post" class="d-flex gap-2">
+                        <input type="text" name="nombre" class="form-control" placeholder="Ej: Nissan..." required />
+                        <button type="submit" class="btn btn-success">Añadir</button>
+                    </form>
+                    <hr />
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-sm table-hover mt-2">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Marca</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in ViewBag.Marcas)
+                                {
+                                    <tr>
+                                        <td>@m.IdMarca</td>
+                                        <td>@m.Nombre</td>
+                                        <td class="text-end">
+                                            <form asp-action="EliminarMarca" asp-route-id="@m.IdMarca" method="post" onsubmit="return confirm('¿Borrar esta marca?')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">Nuevo Modelo</div>
+                <div class="card-body">
+                    <form asp-action="NuevoModelo" method="post" class="row g-2">
+                        <div class="col-md-4">
+                            <select name="idMarca" class="form-select" asp-items="ViewBag.ListaMarcas" required>
+                                <option value="">-- Marca --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre..." required />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="anio" class="form-control" placeholder="Año" min="1900" max="2100" value="@DateTime.Now.Year" required />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Añadir</button>
+                        </div>
+                    </form>
+                    <hr />
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-sm table-hover mt-2">
+                            <thead>
+                                <tr>
+                                    <th>Modelo</th>
+                                    <th>Marca</th>
+                                    <th>Año</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var mod in ViewBag.Modelos)
+                                {
+                                    <tr>
+                                        <td><strong>@mod.Nombre</strong></td>
+                                        <td><span class="badge bg-secondary">@mod.IdMarcaNavigation.Nombre</span></td>
+                                        <td><span class="text-muted">@mod.Anio</span></td>
+                                        <td class="text-end">
+                                            <form asp-action="EliminarModelo" asp-route-id="@mod.IdModelo" method="post" onsubmit="return confirm('¿Borrar este modelo?')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">🗑️</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

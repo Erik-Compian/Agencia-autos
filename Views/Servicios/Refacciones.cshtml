@@ -1,0 +1,121 @@
+﻿@model AgenciaAutosMVC.Models.Servicio
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Servicios">Taller</a></li>
+            <li class="breadcrumb-item active">Refacciones Folio #@Model.Folio</li>
+        </ol>
+    </nav>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> @TempData["Exito"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-plus-circle"></i> Agregar Refacción
+                </div>
+                <div class="card-body">
+                    <form asp-action="AgregarRefaccion" method="post">
+                        <input type="hidden" name="folio" value="@Model.Folio" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Seleccionar Pieza</label>
+                            <select name="idRefaccion" class="form-select" required>
+                                <option value="">-- Seleccione --</option>
+                                @foreach (var r in ViewBag.CatalogoRefacciones)
+                                {
+                                    <option value="@r.IdRefaccion">@r.Nombre (@r.Precio.ToString("C")) - Stock: @r.Stock</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" name="cantidad" class="form-control" value="1" min="1" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-cart-plus"></i> Añadir al Servicio
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <a href="/Servicios/Index" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-left"></i> Volver al Taller
+            </a>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <span>Piezas Utilizadas</span>
+                    <span class="badge bg-info text-dark">Vehículo: @Model.IdVehiculoNavigation?.Placa</span>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Refacción</th>
+                                <th class="text-center">Cant.</th>
+                                <th>Precio Unit.</th>
+                                <th>Subtotal</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.ServicioRefaccions.Any())
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted italic">No hay refacciones registradas en este servicio.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                decimal totalRefacciones = 0;
+                                @foreach (var item in Model.ServicioRefaccions)
+                                {
+                                    var subtotal = item.Cantidad * item.PrecioAplicado;
+                                    totalRefacciones += subtotal;
+                                    <tr>
+                                        <td>@item.IdRefaccionNavigation.Nombre</td>
+                                        <td class="text-center">@item.Cantidad</td>
+                                        <td>@item.PrecioAplicado.ToString("C")</td>
+                                        <td>@subtotal.ToString("C")</td>
+                                        <td class="text-end">
+                                            <form asp-action="EliminarRefaccion" method="post" onsubmit="return confirm('¿Quitar esta pieza del servicio? El stock se devolverá al inventario.')">
+                                                <input type="hidden" name="folio" value="@Model.Folio" />
+                                                <input type="hidden" name="idRefaccion" value="@item.IdRefaccion" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> 🗑️
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr class="table-secondary">
+                                    <td colspan="3" class="text-end"><strong>Total en Refacciones:</strong></td>
+                                    <td colspan="2"><strong>@totalRefacciones.ToString("C")</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

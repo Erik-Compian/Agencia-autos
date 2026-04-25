@@ -10,6 +10,7 @@ public partial class TipoServicio
     public string Nombre { get; set; } = null!;
 
     public string? Descripcion { get; set; }
+    public decimal Precio { get; set; }
 
     public virtual ICollection<Servicio> Servicios { get; set; } = new List<Servicio>();
 }

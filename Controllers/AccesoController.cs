@@ -20,9 +20,8 @@ namespace AgenciaA.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // Si el administrador ya tiene sesión activa, lo mandamos directo al menú principal
-            if (User.Identity!.IsAuthenticated) return RedirectToAction("Index", "Home");
-
+            // ELIMINAMOS la línea que redireccionaba al Home automáticamente.
+            // Ahora, sin importar qué, siempre mostrará la vista del Login.
             return View();
         }
 
@@ -59,14 +58,16 @@ namespace AgenciaA.Controllers
             }
         }
 
-        // 4. Método para Cerrar Sistema (Punto 3 de la rúbrica)
+        // 4. Método para Cerrar Sistema 
         public async Task<IActionResult> Salir()
         {
-            // Destruye las variables globales de sesión de ASP.NET
+            //  Destruye las variables globales de sesión (Claims y Cookies de Autenticación)
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Lo regresa al Login
+            //  Lo regresa al Login (Seguridad de la aplicación)
             return RedirectToAction("Index", "Acceso");
+
         }
+
     }
 }

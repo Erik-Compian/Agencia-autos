@@ -1,8 +1,117 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold">Dashboard de Gestión</h1>
+            <p class="text-muted">Estado actual: <strong>@ViewBag.FiltroActual</strong></p>
+        </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <form asp-action="Index" method="get" class="d-flex gap-2">
+            <input type="date" name="fechaFiltro" class="form-control" value="@ViewBag.FiltroActual" />
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a href="/Home" class="btn btn-outline-secondary">Ver Total</a>
+        </form>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-success text-white shadow border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small opacity-75">Ingresos (@ViewBag.FiltroActual)</h6>
+                    <h2 class="fw-bold mb-0">$@ViewBag.TotalVentas.ToString("N2")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white shadow border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small opacity-75">Vehículos Registrados</h6>
+                    <h2 class="fw-bold mb-0">@ViewBag.TotalVehiculos</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white shadow border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small opacity-75">Clientes Totales</h6>
+                    <h2 class="fw-bold mb-0">@ViewBag.TotalClientes</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card @(ViewBag.StockCriticoCount > 0 ? "bg-danger" : "bg-secondary") text-white shadow border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small opacity-75">Refacciones Críticas</h6>
+                    <h2 class="fw-bold mb-0">@ViewBag.StockCriticoCount</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card shadow border-0 p-4">
+                <h5 class="fw-bold mb-4">Distribución de Servicios</h5>
+                <canvas id="miGrafica" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow border-0 p-4">
+                <h5 class="fw-bold text-danger mb-3">⚠️ Urge Resurtir</h5>
+                <ul class="list-group list-group-flush">
+                    @foreach (var refa in ViewBag.ListaRefaccionesBajas)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            @refa.Nombre
+                            <span class="badge bg-danger rounded-pill">@refa.Stock pzas</span>
+                        </li>
+                    }
+                    @if (ViewBag.StockCriticoCount == 0)
+                    {
+                        <li class="text-muted small">Inventario saludable.</li>
+                    }
+                </ul>
+                <a href="/Catalogos/Refacciones" class="btn btn-sm btn-link mt-3 p-0 text-start">Ir al Almacén →</a>
+            </div>
+        </div>
+    </div>
 </div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Esperamos a que la página cargue para dibujar
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('miGrafica');
+
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['En espera', 'En proceso', 'Finalizados'],
+                        datasets: [{
+                            // Aquí inyectamos los números que calculó tu controlador
+                            data: [@ViewBag.EnEspera, @ViewBag.EnProceso, @ViewBag.Finalizados],
+                            backgroundColor: ['#dc3545', '#ffc107', '#198754'],
+                            borderWidth: 2,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    font: { size: 14 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}
