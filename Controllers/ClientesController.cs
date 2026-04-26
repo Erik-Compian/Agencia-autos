@@ -56,5 +56,42 @@ namespace AgenciaAutosMVC.Controllers
             }
             return View(cliente);
         }
+        // GET: Muestra el formulario con los datos actuales del cliente
+        [HttpGet]
+        public IActionResult Editar(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var cliente = _context.Clientes.Find(id);
+            if (cliente == null) return NotFound();
+
+            return View(cliente);
+        }
+
+        // POST: Guarda los cambios en la base de datos
+        [HttpPost]
+        public IActionResult Editar(Cliente cliente)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Clientes.Update(cliente);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(cliente);
+        }
+
+        // POST: Elimina el cliente de la base de datos
+        [HttpPost]
+        public IActionResult Eliminar(int id)
+        {
+            var cliente = _context.Clientes.Find(id);
+            if (cliente != null)
+            {
+                _context.Clientes.Remove(cliente);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
