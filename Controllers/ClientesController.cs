@@ -17,27 +17,36 @@ namespace AgenciaAutosMVC.Controllers
         [HttpGet]
         public IActionResult Index(string buscar)
         {
-            // Iniciamos la consulta
             var consulta = _context.Clientes.AsQueryable();
 
             if (!string.IsNullOrEmpty(buscar))
             {
                 string b = buscar.ToLower().Trim();
 
-                // Filtramos por Nombre, Apellido, Teléfono o Email
-                consulta = consulta.Where(c =>
-                    c.Nombre.ToLower().Contains(b) ||
-                    c.Apellido.ToLower().Contains(b) ||
-                    c.Telefono.Contains(b) ||
-                    c.Email.ToLower().Contains(b)
-                );
+                // 1. Intentamos ver si el usuario escribió un ID numérico
+                bool esNumero = int.TryParse(b, out int idBuscado);
+
+                if (esNumero)
+                {
+                    // Si es un número, buscamos coincidencia EXACTA por el ID del cliente
+                    // Esto evita que salgan otros clientes por coincidencias en el teléfono
+                    consulta = consulta.Where(c => c.IdCliente == idBuscado);
+                }
+                else
+                {
+                    // 2. Si es texto, buscamos coincidencias en Nombre, Apellido o Email
+                    consulta = consulta.Where(c =>
+                        c.Nombre.ToLower().Contains(b) ||
+                        c.Apellido.ToLower().Contains(b) ||
+                        c.Email.ToLower().Contains(b)
+                    );
+                }
 
                 ViewBag.BusquedaActual = buscar;
             }
 
             return View(consulta.ToList());
         }
-
         // GET: Mostrar el formulario para un cliente nuevo
         public IActionResult Nuevo()
         {

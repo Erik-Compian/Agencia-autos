@@ -103,11 +103,24 @@ namespace AgenciaAutosMVC.Controllers
             if (!string.IsNullOrEmpty(buscar))
             {
                 string b = buscar.ToLower().Trim();
-                consulta = consulta.Where(r => r.Nombre.ToLower().Contains(b));
+
+                
+                bool esNumero = int.TryParse(b, out int idBuscado);
+
+                if (esNumero)
+                {
+                 
+                    consulta = consulta.Where(r => r.IdRefaccion == idBuscado || r.Nombre.ToLower().Contains(b));
+                }
+                else
+                {
+                    
+                    consulta = consulta.Where(r => r.Nombre.ToLower().Contains(b));
+                }
+
                 ViewBag.BusquedaActual = buscar;
             }
 
-            // Ordenamos por Stock: las que se están acabando salen hasta arriba
             return View(consulta.OrderBy(r => r.Stock).ToList());
         }
 
@@ -123,12 +136,23 @@ namespace AgenciaAutosMVC.Controllers
         [HttpPost]
         public IActionResult EditarRefaccion(Refaccion refaccion)
         {
-            if (ModelState.IsValid)
+            // 1. Buscamos la refacción original directamente en la base de datos
+            var refaccionEnBD = _context.Refaccions.Find(refaccion.IdRefaccion);
+
+            if (refaccionEnBD != null)
             {
-                _context.Update(refaccion);
+                // 2. Solo actualizamos los campos que nos importan
+                refaccionEnBD.Precio = refaccion.Precio;
+                refaccionEnBD.Stock = refaccion.Stock;
+
+                // 3. Guardamos los cambios a la fuerza
                 _context.SaveChanges();
+
+                // 4. Redirigimos a la lista
                 return RedirectToAction("Refacciones");
             }
+
+            // Si por alguna razón no la encuentra, regresa la vista
             return View(refaccion);
         }
         // GET: Catalogos/CrearRefaccion

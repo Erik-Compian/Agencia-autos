@@ -183,25 +183,35 @@ namespace AgenciaAutosMVC.Controllers
         // GET: Listado de próximos servicios (Punto 9 de la Rúbrica)
         public IActionResult Proximos(string buscar)
         {
-            // 1. Preparamos la consulta base (Aún no va a la base de datos)
             var consulta = _context.ProximoServicios
                 .Include(p => p.FolioNavigation)
                     .ThenInclude(s => s.IdVehiculoNavigation)
-                    .ThenInclude(v => v.IdClienteNavigation)
+                        .ThenInclude(v => v.IdClienteNavigation)
                 .AsQueryable();
 
-            // 2. Si el usuario escribió algo en el buscador, aplicamos los filtros
             if (!string.IsNullOrEmpty(buscar))
             {
-                consulta = consulta.Where(p =>
-                    p.Folio.ToString().Contains(buscar) ||
-                    p.FolioNavigation.IdVehiculoNavigation.IdClienteNavigation.Nombre.Contains(buscar) ||
-                    p.FolioNavigation.IdVehiculoNavigation.IdClienteNavigation.Apellido.Contains(buscar));
+                string b = buscar.ToLower().Trim();
+
+                // Intentamos convertir la búsqueda a número para el Folio
+                bool esNumero = int.TryParse(b, out int folioBuscado);
+
+                if (esNumero)
+                {
+                    // Si es número, busca coincidencia exacta en Folio
+                    consulta = consulta.Where(p => p.Folio == folioBuscado);
+                }
+                else
+                {
+                    // Si es texto, busca en Nombre o Apellido (Case-insensitive)
+                    consulta = consulta.Where(p =>
+                        p.FolioNavigation.IdVehiculoNavigation.IdClienteNavigation.Nombre.ToLower().Contains(b) ||
+                        p.FolioNavigation.IdVehiculoNavigation.IdClienteNavigation.Apellido.ToLower().Contains(b));
+                }
+                ViewBag.BusquedaActual = buscar;
             }
 
-            // 3. Ejecutamos la consulta ordenando por la fecha más próxima
             var proximos = consulta.OrderBy(p => p.FechaProg).ToList();
-
             return View(proximos);
         }
         // GET: Pantalla para gestionar refacciones de un servicio
