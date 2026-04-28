@@ -22,6 +22,7 @@
                 <th>Folio</th>
                 <th>Vehículo</th>
                 <th>Dueño</th>
+                <th>Quién Entregó</th>
                 <th>Tipo</th>
                 <th>Ingreso</th>
                 <th>Salida</th>
@@ -33,7 +34,7 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="8" class="text-center py-4 text-muted">
+                    <td colspan="9" class="text-center py-4 text-muted">
                         <p class="mb-0">No se encontraron servicios registrados.</p>
                     </td>
                 </tr>
@@ -52,6 +53,7 @@
                             <br><small class="text-muted">Placa: @servicio.IdVehiculoNavigation.Placa</small>
                         </td>
                         <td class="align-middle">@servicio.IdVehiculoNavigation.IdClienteNavigation.Nombre</td>
+                        <td class="align-middle">@servicio.QuienEntrego</td>
                         <td class="align-middle">@servicio.IdTipoServNavigation.Nombre</td>
                         <td class="align-middle">@servicio.FechaIngreso.ToShortDateString()</td>
 

@@ -1,10 +1,8 @@
 ﻿@model AgenciaAutosMVC.Models.Servicio
 @{
     Layout = null;
-    // Calculamos el total de refacciones aquí arriba para limpiar el HTML
     decimal totalRefacciones = Model.ServicioRefaccions.Sum(sr => sr.Cantidad * sr.PrecioAplicado);
-    // Asumimos que el tipo de servicio tiene un costo base (Mano de Obra)
-    decimal costoManoObra = Model.IdTipoServNavigation.Precio; // Revisa si en tu BD es 'Precio' o 'Costo'
+    decimal costoManoObra = Model.IdTipoServNavigation.Precio;
     decimal granTotal = totalRefacciones + costoManoObra;
 }
 
@@ -83,6 +81,7 @@
 
         <div class="mt-3">
             <p class="mb-1 small"><strong>CLIENTE:</strong> @Model.IdVehiculoNavigation.IdClienteNavigation.Nombre @Model.IdVehiculoNavigation.IdClienteNavigation.Apellido</p>
+            <p class="mb-1 small"><strong>ENTREGADO POR:</strong> @Model.QuienEntrego</p>
             <p class="mb-1 small"><strong>AUTO:</strong> @Model.IdVehiculoNavigation.IdModeloNavigation.IdMarcaNavigation.Nombre @Model.IdVehiculoNavigation.IdModeloNavigation.Nombre</p>
             <p class="mb-1 small"><strong>PLACAS:</strong> @Model.IdVehiculoNavigation.Placa</p>
         </div>
